@@ -1,3 +1,4 @@
+$yaml = @'
 name: Publish Docker image to GHCR
 
 permissions:
@@ -41,3 +42,4 @@ jobs:
 
       - name: Show published image
         run: echo "Imagem publicada: ghcr.io/${{ github.repository_owner }}/cicd-lab:${{ github.sha }}"
+'@
