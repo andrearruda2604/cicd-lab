@@ -1,6 +1,5 @@
-name: CI/CD Pipeline
+name: Publish Docker image to GHCR
 
-# permissões necessárias para publicar no GHCR via GITHUB_TOKEN
 permissions:
   contents: read
   packages: write
@@ -8,42 +7,16 @@ permissions:
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
-  ci:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Run tests
-        run: npm test
-
-      - name: Build (local check)
-        run: docker build -t cicd-lab:${{ github.sha }} .
-
   publish_image:
-    needs: ci
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'   # publica só na main
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up QEMU (for multi-arch support)
+      - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx
@@ -56,14 +29,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push image to GHCR
+      - name: Build and Push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
+          file: ./Dockerfile
           push: true
-          tags: |
-            ghcr.io/${{ github.repository_owner }}/cicd-lab:${{ github.sha }}
+          tags: >
+            ghcr.io/${{ github.repository_owner }}/cicd-lab:${{ github.sha }},
             ghcr.io/${{ github.repository_owner }}/cicd-lab:latest
 
-      - name: Output image name
-        run: echo "Image pushed: ghcr.io/${{ github.repository_owner }}/cicd-lab:${{ github.sha }}"
+      - name: Show published image
+        run: echo "Imagem publicada: ghcr.io/${{ github.repository_owner }}/cicd-lab:${{ github.sha }}"
