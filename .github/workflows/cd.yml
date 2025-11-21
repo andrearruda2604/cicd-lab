@@ -40,4 +40,4 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/cicd-lab:latest
 
       - name: Show published image
-        run: echo "Imagem publicada: ghcr.io/${{ github.repository_owner }}/cicd-lab:${{ github.sha }}"
+        run: echo Imagem publicada: ghcr.io/${{ github.repository_owner }}/cicd-lab:${{ github.sha }}
