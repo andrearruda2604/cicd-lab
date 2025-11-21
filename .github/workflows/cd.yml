@@ -35,9 +35,9 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: |  
-            ghcr.io/${{ github.repository_owner }}/cicd-l-lab:${{ github.sha }}
-            ghcr.io/${{ github.repository_owner }}/cicd-lab:latest
+          tags:
+            - ghcr.io/${{ github.repository_owner }}/cicd-lab:${{ github.sha }}
+            - ghcr.io/${{ github.repository_owner }}/cicd-lab:latest
 
       - name: Show published image
         run: echo Imagem publicada: ghcr.io/${{ github.repository_owner }}/cicd-lab:${{ github.sha }}
