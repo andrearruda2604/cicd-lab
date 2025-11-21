@@ -35,7 +35,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: |
+          tags: |  
             ghcr.io/${{ github.repository_owner }}/cicd-l-lab:${{ github.sha }}
             ghcr.io/${{ github.repository_owner }}/cicd-lab:latest
 
